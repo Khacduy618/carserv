@@ -36,21 +36,26 @@ class Account extends Controller
             $Password = $_POST['Password'];
 
             if (empty($Username)) {
-                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => 'Tên đăng nhập không được để trống!'];
+                $_SESSION['flash_message'] = [
+                    'title' => 'Cảnh báo!',
+                    'img' => _WEB_ROOT . '/public/assets/img/medium_priority-48.png',
+                    'type' => 'error',
+                    'message' => 'Tên đăng nhập không được để trống!'
+                ];
                 // setcookie('msg1', 'Tên đăng nhập không được để trống', time() + 5, '/');
                 header('Location: ' . _WEB_ROOT . '/dang-nhap');
                 exit();
             }
 
             if (strlen($Password) < 8) {
-                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => 'Mật khẩu tối thiểu 8 kí tự!'];
+                $_SESSION['flash_message'] = ['title' => 'Cảnh báo!', 'img' => _WEB_ROOT . '/public/assets/img/medium_priority-48.png', 'type' => 'error', 'message' => 'Mật khẩu tối thiểu 8 kí tự!'];
                 // setcookie('msg1', 'Mật khẩu tối thiểu 8 kí tự', time() + 5, '/');
                 header('Location: ' . _WEB_ROOT . '/dang-nhap');
                 exit();
             }
 
             if (!$this->account_model->check_account($Username)) {
-                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => 'Tên đăng nhập không chính xác!'];
+                $_SESSION['flash_message'] = ['title' => 'Cảnh báo!', 'img' => _WEB_ROOT . '/public/assets/img/medium_priority-48.png', 'type' => 'error', 'message' => 'Tên đăng nhập không chính xác!'];
                 header('Location: ' . _WEB_ROOT . '/dang-nhap');
                 exit();
             }
@@ -60,11 +65,13 @@ class Account extends Controller
             if ($user && password_verify($Password, $user['Password'])) {
                 $_SESSION['user'] = $user;
                 if ($_SESSION['user']['Role'] == 'Admin' || $_SESSION['user']['Role'] == 'Staff') {
-                    setcookie('msg', 'Đăng nhập admin thành công', time() + 5, '/');
+                    $_SESSION['flash_message'] = ['title' => 'Kính chào!', 'img' => _WEB_ROOT . '/public/assets/img/ok-48.png', 'type' => 'success', 'message' => 'Chào mừng ' . $_SESSION['user']['FullName'] . '!'];
+
+                    // setcookie('msg', 'Đăng nhập admin thành công', time() + 5, '/');
                     header('Location: ' . _WEB_ROOT . '/admin');
                 }
             } else {
-                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => 'Tên đăng nhập hoặc mật khẩu không chính xác!'];
+                $_SESSION['flash_message'] = ['title' => 'Cảnh báo!', 'img' => _WEB_ROOT . '/public/assets/img/medium_priority-48.png', 'type' => 'error', 'message' => 'Tên đăng nhập hoặc mật khẩu không chính xác!'];
                 header('Location: ' . _WEB_ROOT . '/dang-nhap');
             }
             exit();
@@ -84,42 +91,42 @@ class Account extends Controller
 
 
             if (!filter_var($Email, FILTER_VALIDATE_Email)) {
-                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => 'Email không hợp lệ!'];
+                $_SESSION['flash_message'] = ['title' => 'Cảnh báo!', 'img' => _WEB_ROOT . '/public/assets/img/medium_priority-48.png', 'type' => 'error', 'message' => 'Email không hợp lệ!'];
                 // setcookie('msg1', 'Email không hợp lệ', time() + 5, '/');
                 header('Location: ' . _WEB_ROOT . '/dang-nhap');
                 exit();
             }
 
             if ($this->account_model->check_account($Username)) {
-                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => 'Tên đăng nhập đã tài khoản sử dụng!'];
+                $_SESSION['flash_message'] = ['title' => 'Cảnh báo!', 'img' => _WEB_ROOT . '/public/assets/img/medium_priority-48.png', 'type' => 'error', 'message' => 'Tên đăng nhập đã tài khoản sử dụng!'];
                 // setcookie('msg1', 'Tên đăng nhập đã tài khoản sử dụng!', time() + 5, '/');
                 header('Location: ' . _WEB_ROOT . '/dang-nhap');
                 exit();
             }
 
             if (strlen($FullName) < 2 || strlen($FullName) > 50) {
-                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => 'Tên phải từ 2 đến 50 ký tự!'];
+                $_SESSION['flash_message'] = ['title' => 'Cảnh báo!', 'img' => _WEB_ROOT . '/public/assets/img/medium_priority-48.png', 'type' => 'error', 'message' => 'Tên phải từ 2 đến 50 ký tự!'];
                 // setcookie('msg1', 'Tên phải từ 2 đến 50 ký tự', time() + 5, '/');
                 header('Location: ' . _WEB_ROOT . '/dang-nhap');
                 exit();
             }
 
             if (strlen($Password) < 8) {
-                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => 'Mật khẩu phải có ít nhất 8 ký tự!'];
+                $_SESSION['flash_message'] = ['title' => 'Cảnh báo!', 'img' => _WEB_ROOT . '/public/assets/img/medium_priority-48.png', 'type' => 'error', 'message' => 'Mật khẩu phải có ít nhất 8 ký tự!'];
                 // setcookie('msg1', 'Mật khẩu phải có ít nhất 8 ký tự', time() + 5, '/');
                 header('Location: ' . _WEB_ROOT . '/dang-nhap');
                 exit();
             }
 
             if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/', $Password)) {
-                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => 'Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số!'];
+                $_SESSION['flash_message'] = ['title' => 'Cảnh báo!', 'img' => _WEB_ROOT . '/public/assets/img/medium_priority-48.png', 'type' => 'error', 'message' => 'Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số!'];
                 // setcookie('msg1', 'Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số', time() + 5, '/');
                 header('Location: ' . _WEB_ROOT . '/dang-nhap');
                 exit();
             }
 
             if ($Password !== $check_Password) {
-                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => 'Mật khẩu xác nhận không khớp!'];
+                $_SESSION['flash_message'] = ['title' => 'Cảnh báo!', 'img' => _WEB_ROOT . '/public/assets/img/medium_priority-48.png', 'type' => 'error', 'message' => 'Mật khẩu xác nhận không khớp!'];
                 // setcookie('msg1', 'Mật khẩu xác nhận không khớp', time() + 5, '/');
                 header('Location: ' . _WEB_ROOT . '/dang-nhap');
                 exit();
@@ -144,11 +151,11 @@ class Account extends Controller
             $status = $this->account_model->store($data);
 
             if ($status) {
-                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'success', 'message' => 'Tạo người dùng mới thành công!'];
+                $_SESSION['flash_message'] = ['title' => 'Chúc mừng!', 'img' => _WEB_ROOT . '/public/assets/img/ok-48.png', 'type' => 'success', 'message' => 'Tạo người dùng mới thành công!'];
                 // setcookie('msg', 'Tạo người dùng mới thành công', time() + 5, '/');
                 header('Location: ' . _WEB_ROOT . '/dang-nhap');
             } else {
-                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => 'Tạo người dùng mới thất bại!'];
+                $_SESSION['flash_message'] = ['title' => 'Cảnh báo!', 'img' => _WEB_ROOT . '/public/assets/img/medium_priority-48.png', 'type' => 'error', 'message' => 'Tạo người dùng mới thất bại!'];
                 // setcookie('msg1', 'Tạo người dùng mới thất bại', time() + 5, '/');
                 header('Location: ' . _WEB_ROOT . '/dang-nhap');
             }

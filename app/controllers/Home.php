@@ -15,52 +15,53 @@ class Home extends Controller
 
     public function index()
     {
-        $title = 'Home';
-
-        // Lấy 3 danh mục cha (Smartphones, Tablets, Laptops)
-        // $this->data['sub_content']['parent_categories'] = $this->home_model->getParentCategories(3);
-
-        // // Debug để kiểm tra dữ liệu
-        // // echo '<pre>';
-        // // print_r($this->data['sub_content']['parent_categories']);
-        // // echo '</pre>';
-
-        // $this->data['sub_content']['featured_products'] = $this->home_model->getFeaturedProducts(10);
-        // $this->data['sub_content']['sale_products'] = $this->home_model->getOnSaleProducts(10);
-        // $this->data['sub_content']['top_rated_products'] = $this->home_model->getTopRatedProducts(10);
-        // $this->data['sub_content']['deal_on'] = $this->home_model->getTopSellingAndOnSaleProducts(2);
+        $title = 'Trang chủ';
         $this->data['sub_content']['title'] = $title;
         $this->data['page_title'] = $title;
         $this->data['content'] = 'frontend/home/index';
         $this->render('layouts/client_layout', $this->data);
     }
 
-    // public function getProductsByCategory() {
-    //     if(isset($_POST['category_id'])) {
-    //         $products = $this->home_model->getTrendingProducts($_POST['category_id']);
-    //         // Debug AJAX response
-    //         error_log('Products for category ' . $_POST['category_id'] . ': ' . print_r($products, true));
-    //         echo json_encode($products);
-    //     }
-    // }
+    public function searchBooking()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'GET') {
+            $licensePlate = $_POST['license_plate'] ?? $_GET['license_plate'];
+            $licensePlate = strtoupper(preg_replace("/[^a-zA-Z0-9]/", " ", $licensePlate));
 
-    // public function getTopSellingProducts() {
-    //     // header('Content-Type: application/json');
+            $customerName = $_POST['customerName'] ?? $_GET['customerName'];
+            $bookings = $this->home_model->getBookingsByLicensePlate($licensePlate, $customerName);
+            $_SESSION['customerName'] = $customerName;
+            $_SESSION['license_plate'] = $licensePlate;
 
-    //     if(!isset($_POST['category_id'])) {
-    //         echo json_encode(['error' => 'Category ID is required']);
-    //         exit;
-    //     }
+            $this->data['sub_content']['bookings'] = $bookings;
+            $this->data['sub_content']['licensePlate'] = $licensePlate;
+            $this->data['sub_content']['title'] = 'Kết quả tìm kiếm';
+            $this->data['page_title'] = 'Kết quả tìm kiếm';
+            $this->data['content'] = 'frontend/home/search_results';
+            $this->render('layouts/client_layout', $this->data);
+        } else {
+            header('Location: ' . _WEB_ROOT . '/trang-chu');
+        }
+    }
 
-    //         $categoryId = $_POST['category_id'];
-    //         $products = $this->home_model->getTopSellingProductsByCategory($categoryId);
+    public function viewBookingForm()
+    {
+        $this->data['page_title'] = 'Tìm kiếm lịch hẹn';
+        $this->data['sub_content']['title'] = 'Tìm kiếm lịch hẹn';
+        $this->data['content'] = 'frontend/home/booking_form';
+        $this->render('layouts/client_layout', $this->data);
+    }
 
-    //         // Debug
-    //         error_log("Request received for category: " . $categoryId);
-    //         error_log("Found " . count($products) . " products");
+    public function cancelBooking($bookingCode)
+    {
+        // TODO: Verify cancellation token from email
 
-    //         echo json_encode($products);
+        // Update booking status to "Cancelled" (StatusID = 5)
+        $data = ['StatusID' => 5];
+        $this->home_model->updateBookingStatus($bookingCode, $data);
 
-    //     exit;
-    // }
+        // Redirect to search results page
+        header('Location: ' . _WEB_ROOT . '/search-booking?customerName=' . urlencode($_SESSION['customerName']) . '&license_plate=' . urlencode($_SESSION["license_plate"]));
+        exit();
+    }
 }

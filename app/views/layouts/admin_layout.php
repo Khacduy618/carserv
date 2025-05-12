@@ -31,7 +31,7 @@
     <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="<?php echo _WEB_ROOT; ?>/public/assets/admin/css/style.css" id="main-style-link">
     <link rel="stylesheet" href="<?php echo _WEB_ROOT; ?>/public/assets/admin/css/style-preset.css">
-    <link rel="stylesheet" href="<?= _WEB_ROOT; ?>/public/assets/toastr.css">
+    <link rel="stylesheet" href="<?= _WEB_ROOT; ?>/public/assets/css/notifier.css">
 
 
 </head>
@@ -94,68 +94,15 @@
 
 
     <script>font_change("Public-Sans");</script>
-    <script src="<?= _WEB_ROOT; ?>/public/assets/toastr.js"></script>
+    <script src="<?= _WEB_ROOT; ?>/public/assets/js/notifier.js"></script>
     <?php
     if (isset($_SESSION['flash_message'])) {
         $flash_message = $_SESSION['flash_message'];
         unset($_SESSION['flash_message']); // Clear the message after reading
         // Use addslashes to escape quotes in the message for JavaScript
         echo "<script>
-        const toasts = new Toasts({
-            width: 300,
-            timing: 'ease',
-            duration: '.5s',
-            dimOld: false,
-            position: 'top-right' // top-left | top-center | top-right | bottom-left | bottom-center | bottom-right
-        });
-
-        toasts.push({
-            title: '" . $flash_message['title'] . "',
-            content: '" . $flash_message['message'] . "',
-            style: '" . $flash_message['type'] . "',
-            closeButton: true,
-            // link: 'https://codeshack.io',
-            // linkTarget: '_blank',
-            onOpen: toast => {
-                console.log(toast);
-            },
-            onClose: toast => {
-                console.log(toast);
-            }
-        });
-
-        // toasts.push({
-        //     title: 'Success Toast',
-        //     content: 'My notification description.',
-        //     style: 'success'
-        // });
-
-        // toasts.push({
-        //     title: 'Verified Toast',
-        //     content: 'My notification description.',
-        //     style: 'verified'
-        // });
-
-        // toasts.push({
-        //     title: 'Error Toast',
-        //     content: 'My notification description.',
-        //     style: 'error'
-        // });
-
-        // toasts.push({
-        //     title: 'Toast',
-        //     content: 'My notification description.'
-        // });
-
-        // Press SPACE to add a custom toast
-        // window.onkeyup = event => {
-        //     if (event.key == ' ') {
-        //         toasts.push({
-        //             title: 'Custom ' + (toasts.numToasts+1),
-        //             content: 'Custom description ' + (toasts.numToasts+1) + '.'
-        //         });
-        //     }
-        // };
+        notifier.show('" . $flash_message['title'] . "' , '" . $flash_message['message'] . "', '" . $flash_message['type'] . "', '" . $flash_message['img'] . "', 4000);
+        
         </script>
         ";
     }

@@ -55,6 +55,7 @@ class Booking extends Controller
             $model = $_POST['Model'];
             $carYear = $_POST['CarYear'];
             $licensePlate = $_POST['LicensePlate'];
+            $licensePlate = strtoupper(preg_replace("/[^a-zA-Z0-9]/", " ", $licensePlate));
             $serviceID = json_decode($_POST['ServiceID']);
             $bookingDate = $_POST['BookingDateTime'];
             $timeslotID = $_POST['SlotID'];
@@ -137,7 +138,7 @@ class Booking extends Controller
             }
             $timeslot = $this->timeslots_model->findbyId($timeslotID);
             // Create a booking code
-            $bookingCode = 'BK' . date('YmdHis');
+            $bookingCode = 'BK' . date('YmdHis') . rand(0, 9999);
 
             // Check if LicensePlate exists
             $existingCar = $this->booking_model->getCarByLicensePlate($licensePlate);

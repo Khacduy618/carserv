@@ -33,7 +33,7 @@
                             </div>
                             <div class="col-12 col-sm-6">
                                 <input type="text" class="form-control border-0" placeholder="Mã VIN (Bắt buộc)"
-                                    style="height: 55px;" name="VIN">
+                                    style="height: 55px;" name="VIN" maxlength="17">
                             </div>
                             <div class="col-12 col-sm-6">
                                 <input type="text" class="form-control border-0" placeholder="Hãng xe (Bắt buộc)"
@@ -226,9 +226,9 @@
 
 
                             </div>
-                            <div class="col-12 col-sm-6">
-                                <a class="btn form-control" data-bs-toggle="modal" data-bs-target="#dateModal">
-                                    Đặt lịch hẹn <br> (Chọn khung giờ)
+                            <div class="col-2 col-sm-2">
+                                <a class="form-control" data-bs-toggle="modal" data-bs-target="#dateModal">
+                                    <i class="fa-solid fa-calendar-days"></i>
                                 </a>
                                 <input type="hidden" name="BookingDateTime" id="selectedDateTime">
                             </div>

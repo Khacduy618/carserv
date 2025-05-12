@@ -46,7 +46,7 @@ class Staff extends Controller
         // Ensure page is within valid range
         $page = min($page, max(1, $total_pages));
 
-        $title = 'User Management';
+        $title = 'Quản lý nhân viên';
         $this->data['sub_content']['title'] = $title;
         $this->data['page_title'] = $title;
         $this->data['sub_content']['users'] = $this->staff_model->getAllStaff($search, $status, $page, $perpage);
@@ -57,7 +57,7 @@ class Staff extends Controller
             'search' => $search,
             'status' => $status
         ];
-        $this->data['content'] = 'backend/users/list';
+        $this->data['content'] = 'backend/user/list';
         $this->render('layouts/admin_layout', $this->data);
     }
 
@@ -76,7 +76,8 @@ class Staff extends Controller
             // Validate required fields
             if (
                 empty($_POST['user_email']) || empty($_POST['user_name']) ||
-                empty($_POST['user_phone']) || empty($_FILES['user_images']['name'])
+                empty($_POST['user_phone'])
+                // || empty($_FILES['user_images']['name'])
             ) {
                 $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Vui lòng điền đầy đủ thông tin!'];
                 // setcookie('msg1', 'Vui lòng điền đầy đủ thông tin!', time() + 5, '/');
@@ -119,45 +120,45 @@ class Staff extends Controller
                 exit();
             }
 
-            // Validate image
-            $file = $_FILES['user_images'];
-            $allowed = ['jpg', 'jpeg', 'png'];
-            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            // // Validate image
+            // $file = $_FILES['user_images'];
+            // $allowed = ['jpg', 'jpeg', 'png'];
+            // $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
 
-            if (!in_array($ext, $allowed)) {
-                $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Chỉ chấp nhận file ảnh định dạng: jpg, jpeg, png!'];
-                // setcookie('msg1', 'Chỉ chấp nhận file ảnh định dạng: jpg, jpeg, png!', time() + 5, '/');
-                header('Location: ' . _WEB_ROOT . '/add-new-user');
-                exit();
-            }
+            // if (!in_array($ext, $allowed)) {
+            //     $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Chỉ chấp nhận file ảnh định dạng: jpg, jpeg, png!'];
+            //     // setcookie('msg1', 'Chỉ chấp nhận file ảnh định dạng: jpg, jpeg, png!', time() + 5, '/');
+            //     header('Location: ' . _WEB_ROOT . '/add-new-user');
+            //     exit();
+            // }
 
-            if ($file['size'] > 2 * 1024 * 1024) {
-                $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Kích thước file không được vượt quá 2MB!'];
-                // setcookie('msg1', 'Kích thước file không được vượt quá 2MB!', time() + 5, '/');
-                header('Location: ' . _WEB_ROOT . '/add-new-user');
-                exit();
-            }
+            // if ($file['size'] > 2 * 1024 * 1024) {
+            //     $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Kích thước file không được vượt quá 2MB!'];
+            //     // setcookie('msg1', 'Kích thước file không được vượt quá 2MB!', time() + 5, '/');
+            //     header('Location: ' . _WEB_ROOT . '/add-new-user');
+            //     exit();
+            // }
 
-            // Generate new filename
-            $new_filename = uniqid() . '.' . $ext;
-            $base_path = str_replace('\\', '/', dirname(dirname(dirname(__FILE__))));
-            $upload_path = $base_path . '/public/uploads/avatar/';
+            // // Generate new filename
+            // $new_filename = uniqid() . '.' . $ext;
+            // $base_path = str_replace('\\', '/', dirname(dirname(dirname(__FILE__))));
+            // $upload_path = $base_path . '/public/uploads/avatar/';
 
-            // Handle upload
-            if (!$this->handleUpload($base_path, $upload_path, $file['tmp_name'], $new_filename)) {
-                $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Không thể tải lên file ảnh!'];
-                // setcookie('msg1', 'Không thể tải lên file ảnh!', time() + 5, '/');
-                header('Location: ' . _WEB_ROOT . '/add-new-user');
-                exit();
-            }
+            // // Handle upload
+            // if (!$this->handleUpload($base_path, $upload_path, $file['tmp_name'], $new_filename)) {
+            //     $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Không thể tải lên file ảnh!'];
+            //     // setcookie('msg1', 'Không thể tải lên file ảnh!', time() + 5, '/');
+            //     header('Location: ' . _WEB_ROOT . '/add-new-user');
+            //     exit();
+            // }
 
             // Prepare data
             $data = array(
-                'user_name' => $user_name,
+                'Username' => $user_name,
                 'user_phone' => $phone,
                 'user_email' => $_POST['user_email'],
                 'user_role' => $_POST['user_role'],
-                'user_images' => $new_filename
+                // 'user_images' => $new_filename
             );
 
             // Handle special characters
