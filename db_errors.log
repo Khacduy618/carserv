@@ -102,3 +102,28 @@
 2025-05-11 03:57:20 - SQLSTATE[42S22]: Column not found: 1054 Unknown column 'LicensePlate' in 'field list'
 2025-05-11 04:11:34 - SQLSTATE[42S22]: Column not found: 1054 Unknown column 'BookingDate' in 'field list'
 2025-05-11 04:14:53 - SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '43G1-423.11' for key 'LicensePlate'
+2025-05-18 04:07:38 - SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM bookings b
+        JOIN bookingstatuses bs ON b.StatusID = bs.StatusID...' at line 20
+2025-05-18 04:08:27 - SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM bookings b
+        JOIN bookingstatuses bs ON b.StatusID = bs.StatusID...' at line 20
+2025-05-18 04:08:36 - SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM bookings b
+        JOIN bookingstatuses bs ON b.StatusID = bs.StatusID...' at line 20
+2025-05-18 04:09:04 - SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM bookings b
+        JOIN bookingstatuses bs ON b.StatusID = bs.StatusID...' at line 20
+2025-05-18 04:09:04 - SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM bookings b
+        JOIN bookingstatuses bs ON b.StatusID = bs.StatusID...' at line 20
+2025-05-18 04:09:04 - SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM bookings b
+        JOIN bookingstatuses bs ON b.StatusID = bs.StatusID...' at line 20
+2025-05-18 04:09:05 - SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM bookings b
+        JOIN bookingstatuses bs ON b.StatusID = bs.StatusID...' at line 20
+2025-05-18 04:09:07 - SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM bookings b
+        JOIN bookingstatuses bs ON b.StatusID = bs.StatusID...' at line 20
+2025-05-18 04:09:08 - SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'FROM bookings b
+        JOIN bookingstatuses bs ON b.StatusID = bs.StatusID...' at line 20
+2025-05-18 04:23:36 - SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '.StatusName
+        FROM bookings b
+        JOIN bookingstatuses bs ON b.St...' at line 18
+2025-05-18 04:25:12 - SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '.StatusName
+        FROM bookings b
+        JOIN bookingstatuses bs ON b.St...' at line 18
+2025-05-19 05:52:52 - SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens

@@ -36,7 +36,8 @@
                                             <?= $booking['StatusName'] ?>
                                         </td>
                                         <td>
-                                            <a href="#" class="btn btn-primary">Xem chi tiết</a>
+                                            <a href="<?= _WEB_ROOT ?>/view-detail/<?= $booking['BookingCode'] ?>"
+                                                class="btn btn-primary">Xem chi tiết</a>
                                             <?php if ($booking['StatusID'] != 3 && $booking['StatusID'] != 4 && $booking['StatusID'] != 5): ?>
                                                 <a href="<?= _WEB_ROOT ?>/cancel-booking/<?= $booking['BookingCode'] ?>?license_plate=<?= $licensePlate ?>"
                                                     class="btn btn-warning">Hủy</a>

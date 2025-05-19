@@ -52,16 +52,5 @@ class Home extends Controller
         $this->render('layouts/client_layout', $this->data);
     }
 
-    public function cancelBooking($bookingCode)
-    {
-        // TODO: Verify cancellation token from email
-
-        // Update booking status to "Cancelled" (StatusID = 5)
-        $data = ['StatusID' => 5];
-        $this->home_model->updateBookingStatus($bookingCode, $data);
-
-        // Redirect to search results page
-        header('Location: ' . _WEB_ROOT . '/search-booking?customerName=' . urlencode($_SESSION['customerName']) . '&license_plate=' . urlencode($_SESSION["license_plate"]));
-        exit();
-    }
+    
 }

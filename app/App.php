@@ -13,7 +13,7 @@ class App
         $this->__routes = new \Core\Route();
 
         // Fetch service categories and store them in a global variable
-        $serviceModel = new \App\Models\ServiceCategoriesModel();
+        $serviceModel = new \App\Models\ServiceCategoryModel();
         global $serviceCategories;
         $serviceCategories = $serviceModel->getServiceCategories();
 

@@ -56,8 +56,12 @@
                                     id="notes">Ghi chú thêm (Tùy chọn)</textarea>
                             </div>
                             <div class="col-12 col-sm-6">
-                                <a class="btn form-control" data-bs-toggle="modal" data-bs-target="#serviceModal">
-                                    Chọn dịch vụ <br> (có thể chọn nhiều)
+                                <a class="form-control bg-white" data-bs-toggle="modal" data-bs-target="#serviceModal">
+                                    <div class="row bg-white">
+                                        <span class="col-sm-7 mt-2">Chọn dịch vụ</span> <img
+                                            src="<?= _WEB_ROOT ?>/public/assets/site/img/self-service.png"
+                                            alt="services icon" style="width:34%;" class="col-12 col-sm-5">
+                                    </div>
                                 </a>
                                 <input type="hidden" name="ServiceID" id="selectedServices">
 
@@ -224,11 +228,15 @@
                                     });
                                 </script>
 
-
                             </div>
-                            <div class="col-2 col-sm-2">
-                                <a class="form-control" data-bs-toggle="modal" data-bs-target="#dateModal">
-                                    <i class="fa-solid fa-calendar-days"></i>
+                            <div class="col-12 col-sm-6">
+                                <a data-bs-toggle="modal" data-bs-target="#dateModal" class="form-control bg-white">
+                                    <div class="row bg-white">
+                                        <span class="col-12 col-sm-7 mt-2">Đặt lịch</span><img
+                                            src="<?= _WEB_ROOT ?>/public/assets/site/img/3d-calendar.png"
+                                            alt="icon calendar" style="width:34%;" class="col-12 col-sm-5">
+                                    </div>
+
                                 </a>
                                 <input type="hidden" name="BookingDateTime" id="selectedDateTime">
                             </div>

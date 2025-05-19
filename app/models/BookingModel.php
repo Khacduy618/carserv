@@ -128,4 +128,46 @@ class BookingModel extends Model
         $sql = "SELECT * FROM timeslots WHERE SlotDate = ?";
         return $this->pdo_query_all($sql, [$date]);
     }
+
+    public function getBookingDetails($bookingCode)
+    {
+        $sql = "SELECT
+           
+            b.BookingCode,
+            b.CustomerName,
+            b.CustomerPhoneNumber,
+            b.CustomerEmail,
+            b.BookingDate,
+            b.Time,
+            b.Notes,
+            b.EstimatedCompletionTime,
+            b.ActualCompletionTime,
+            b.TotalPrice,
+            b.CancellationReason,
+            bs.StatusName,
+            c.LicensePlate,
+            c.Brand,
+            c.Model,
+            c.CarYear
+        FROM bookings b
+        JOIN bookingstatuses bs ON b.StatusID = bs.StatusID
+        JOIN cars c ON b.CarID = c.CarID
+        WHERE b.BookingCode = ?";
+
+        return $this->pdo_query_one($sql, [$bookingCode]);
+    }
+
+    public function getBookingServices($bookingCode)
+    {
+        $sql = "SELECT
+            s.ServiceName,
+
+            bs.PriceAtBooking
+        FROM bookingservices bs
+        JOIN bookings b ON bs.BookingID = b.BookingID
+        JOIN services s ON bs.ServiceID = s.ServiceID
+        WHERE b.BookingCode = ?";
+
+        return $this->pdo_query_all($sql, [$bookingCode]);
+    }
 }

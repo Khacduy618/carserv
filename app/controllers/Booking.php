@@ -285,6 +285,41 @@ class Booking extends Controller
         }
     }
 
+    public function cancelBooking($bookingCode)
+    {
+        // TODO: Verify cancellation token from email
+
+        // Update booking status to "Cancelled" (StatusID = 5)
+        $data = ['StatusID' => 5];
+        $this->booking_model->updateBookingStatus($bookingCode, $data);
+
+        // Redirect to search results page
+        header('Location: ' . _WEB_ROOT . '/search-booking?customerName=' . urlencode($_SESSION['customerName']) . '&license_plate=' . urlencode($_SESSION["license_plate"]));
+        exit();
+    }
+
+    public function detail($bookingCode)
+    {
+        // echo "Booking Code: " . $bookingCode . "<br>"; // Debugging
+
+        $booking = $this->booking_model->getBookingDetails($bookingCode);
+        $bookingServices = $this->booking_model->getBookingServices($bookingCode);
+
+        if ($booking) {
+            // echo "Booking Data: <pre>";
+            // print_r($booking);
+
+            // echo "</pre>"; // Debugging
+            $this->data['sub_content']['booking'] = $booking;
+            $this->data['sub_content']['bookingServices'] = $bookingServices;
+            $this->data['content'] = 'frontend/booking/detail';
+            $this->render('layouts/client_layout', $this->data);
+        } else {
+            // Handle the case where the booking is not found
+            echo "Booking not found.";
+        }
+    }
+
     // public function success()
     // {
     //     $this->data['content'] = 'frontend/trang-chu/success';

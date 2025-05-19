@@ -23,16 +23,5 @@ class HomeModel extends Model
         return $this->pdo_query_all($sql, ["%{$licensePlate}%", "%{$customerName}%"]);
     }
 
-    public function updateBookingStatus($bookingCode, $data)
-    {
-        if (!empty($data)) {
-            $fields = "";
-            foreach ($data as $key => $value) {
-                $fields .= "$key = '$value',";
-            }
-            $fields = trim($fields, ",");
-            $sql = "UPDATE bookings SET $fields WHERE BookingCode = ?";
-            return $this->pdo_execute($sql, $bookingCode);
-        }
-    }
+    
 }
