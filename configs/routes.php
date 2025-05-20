@@ -15,13 +15,25 @@ $routes['search-booking'] = 'home/searchBooking';
 $routes['cancel-booking'] = 'booking/cancelBooking';
 $routes['view-booking-form'] = 'home/viewBookingForm';
 $routes['view-detail'] = 'booking/detail';
+
 //backend
 $routes['staff'] = 'staff/list_staff';
+$routes['add-staff'] = 'staff/add';
+$routes['store-staff'] = 'staff/store';
+$routes['edit-staff'] = 'staff/edit';
+$routes['update-staff'] = 'staff/update';
+$routes['delete-staff'] = 'staff/delete';
+
+$routes['booking'] = 'booking/list';
+
 $routes['customer'] = 'customer';
+
 $routes['car-detail'] = 'car/detail';
 
+
 $routes['servicecategory'] = 'servicecategory';
-$routes['servicecategory/add'] = 'servicecategory/add';
-$routes['servicecategory/edit'] = 'servicecategory/edit';
-$routes['servicecategory/delete'] = 'servicecategory/delete';
+$routes['servicecategory-add'] = 'servicecategory/add';
+$routes['servicecategory-edit'] = 'servicecategory/edit';
+$routes['servicecategory-delete'] = 'servicecategory/delete';
+$routes['trash-category'] = 'servicecategory/trash';
 ?>

@@ -6,9 +6,7 @@
                 <input type="text" id="searchInput" name="search"
                     placeholder="Tìm kiếm tên, email, số điện thoại, biển số"
                     style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                <button type="submit"
-                    style="padding: 8px 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Tìm
-                    kiếm</button>
+
             </div>
         </form>
         <table id="customerTable" style="width: 100%; border-collapse: collapse;">
@@ -19,10 +17,12 @@
                         <?php
                         $currentSort = isset($_GET['sort']) ? $_GET['sort'] : '';
                         $currentOrder = isset($_GET['order']) ? $_GET['order'] : 'ASC';
+                        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
                         $sortOrder = ($currentSort == 'CustomerName' && strtoupper($currentOrder) == 'ASC') ? 'DESC' : 'ASC';
                         $sortIcon = ($sortOrder == 'DESC') ? '&#8593;' : '&#8595;';
                         ?>
-                        <a href="?sort=CustomerName&order=<?= $sortOrder ?>" style="color: black !important;">Tên
+                        <a href="?page=<?= $currentPage ?>&sort=CustomerName&order=<?= $sortOrder ?>"
+                            style="color: black !important;">Tên
                             khách hàng
                             <?= $sortIcon ?></a>
                     </th>
@@ -30,30 +30,36 @@
                         <?php
                         $currentSort = isset($_GET['sort']) ? $_GET['sort'] : '';
                         $currentOrder = isset($_GET['order']) ? $_GET['order'] : 'ASC';
+                        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
                         $sortOrder = ($currentSort == 'CustomerPhoneNumber' && strtoupper($currentOrder) == 'ASC') ? 'DESC' : 'ASC';
                         $sortIcon = ($sortOrder == 'DESC') ? '&#8593;' : '&#8595;';
                         ?>
-                        <a href="?sort=CustomerPhoneNumber&order=<?= $sortOrder ?>" style="color: black !important;">Số
+                        <a href="?page=<?= $currentPage ?>&sort=CustomerPhoneNumber&order=<?= $sortOrder ?>"
+                            style="color: black !important;">Số
                             điện thoại <?= $sortIcon ?></a>
                     </th>
                     <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">
                         <?php
                         $currentSort = isset($_GET['sort']) ? $_GET['sort'] : '';
                         $currentOrder = isset($_GET['order']) ? $_GET['order'] : 'ASC';
+                        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
                         $sortOrder = ($currentSort == 'CustomerEmail' && strtoupper($currentOrder) == 'ASC') ? 'DESC' : 'ASC';
                         $sortIcon = ($sortOrder == 'DESC') ? '&#8593;' : '&#8595;';
                         ?>
-                        <a href="?sort=CustomerEmail&order=<?= $sortOrder ?>" style="color: black !important;">Email
+                        <a href="?page=<?= $currentPage ?>&sort=CustomerEmail&order=<?= $sortOrder ?>"
+                            style="color: black !important;">Email
                             <?= $sortIcon ?></a>
                     </th>
                     <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">
                         <?php
                         $currentSort = isset($_GET['sort']) ? $_GET['sort'] : '';
                         $currentOrder = isset($_GET['order']) ? $_GET['order'] : 'ASC';
+                        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
                         $sortOrder = ($currentSort == 'NumberOfBookings' && strtoupper($currentOrder) == 'ASC') ? 'DESC' : 'ASC';
                         $sortIcon = ($sortOrder == 'DESC') ? '&#8593;' : '&#8595;';
                         ?>
-                        <a href="?sort=NumberOfBookings&order=<?= $sortOrder ?>" style="color: black !important;">Tổng
+                        <a href="?page=<?= $currentPage ?>&sort=NumberOfBookings&order=<?= $sortOrder ?>"
+                            style="color: black !important;">Tổng
                             đơn <?= $sortIcon ?></a>
                     </th>
                     <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Biển số xe</th>
@@ -96,6 +102,19 @@
                 ?>
             </tbody>
         </table>
+         <div class="pagination">
+            <?php if ($page > 1): ?>
+                <a href="?page=<?php echo $page - 1; ?>&search=<?php echo htmlspecialchars($search); ?>&sort=<?php echo htmlspecialchars($sort); ?>&order=<?php echo htmlspecialchars($order); ?>">Previous</a>
+            <?php endif; ?>
+
+            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <a href="?page=<?php echo $i; ?>&search=<?php echo htmlspecialchars($search); ?>&sort=<?php echo htmlspecialchars($sort); ?>&order=<?php echo htmlspecialchars($order); ?>" <?php if ($i == $page) echo 'class="active"'; ?>><?php echo $i; ?></a>
+            <?php endfor; ?>
+
+            <?php if ($page < $total_pages): ?>
+                <a href="?page=<?php echo $page + 1; ?>&search=<?php echo htmlspecialchars($search); ?>&sort=<?php echo htmlspecialchars($sort); ?>&order=<?php echo htmlspecialchars($order); ?>">Next</a>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
 <script>
@@ -106,7 +125,7 @@
         table = document.getElementById("customerTable");
         tr = table.getElementsByTagName("tr");
         for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[2]; // Index 2 is the Name column
+            td = tr[i].getElementsByTagName("td")[0]; // Index 0 is the Name column
             if (td) {
                 txtValue = td.textContent || td.innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {

@@ -16,64 +16,59 @@ class BookingModel extends Model
         $this->contents = "BookingID";
     }
 
-
-    public function getAllBooking($keyword = "", $status = "", $page = 1, $item_per_page = 12)
+    public function getBookings($keyword = "", $sort = 'BookingDate', $order = 'ASC', $page = 1, $item_per_page = 10)
     {
         $offset = ($page - 1) * $item_per_page;
 
-        $sql = "SELECT BookingID, BookingCode, CustomerName, CustomerPhoneNumber, CarID, BookingDateTime, StatusID, StaffID
-                FROM {$this->table}
-                WHERE 1";
+        $sql = "SELECT b.* , c.LicensePlate FROM {$this->table} b LEFT JOIN cars c ON b.CarID = c.CarID WHERE 1";
 
         $params = [];
 
         // Handle search
         if (!empty($keyword) && $keyword !== '/' && $keyword !== '') {
-            $sql .= " AND (CustomerName LIKE ? OR BookingCode LIKE ? OR CustomerPhoneNumber LIKE ? )";
+            $sql .= " AND (b.BookingCode LIKE ? OR b.CustomerName LIKE ? OR b.CustomerPhoneNumber LIKE ? OR b.CustomerEmail LIKE ? OR c.LicensePlate LIKE ?)";
+            $params[] = "%$keyword%";
+            $params[] = "%$keyword%";
             $params[] = "%$keyword%";
             $params[] = "%$keyword%";
             $params[] = "%$keyword%";
         }
 
-        // Handle status filter
-        if ($status !== '') {
-            $sql .= " AND {$this->status} = ?";
-            $params[] = $status;
-        }
+        $sql .= " ORDER BY $sort $order";
 
-        $sql .= " ORDER BY CreatedAt ASC";
-        if ($item_per_page > 0) {
-            $sql .= " LIMIT " . (int) $item_per_page;
-        }
+        $sql .= " LIMIT " . (int) $item_per_page;
 
-        if ($offset > 0) {
-            $sql .= " OFFSET " . (int) $offset;
-        }
+        $sql .= " OFFSET " . (int) $offset;
 
         return $this->pdo_query_all($sql, $params);
     }
 
-    public function getTotalBookings($keyword = "", $status = "")
+    public function getTotalBookings($keyword = "")
     {
-        $sql = "SELECT COUNT(*) as total FROM {$this->table} WHERE 1";
+        $sql = "SELECT COUNT(*) AS total FROM {$this->table} WHERE 1";
+
         $params = [];
 
+        // Handle search
         if (!empty($keyword) && $keyword !== '/' && $keyword !== '') {
-            $sql .= " AND (CustomerName LIKE ? OR BookingCode LIKE ? OR CustomerPhoneNumber LIKE ? )";
+            $sql .= " AND (b.BookingCode LIKE ? OR b.CustomerName LIKE ? OR b.CustomerPhoneNumber LIKE ? OR b.CustomerEmail LIKE ? OR c.LicensePlate LIKE ?)";
             $params[] = "%$keyword%";
             $params[] = "%$keyword%";
             $params[] = "%$keyword%";
-        }
-        $sql .= " ORDER BY CreatedAt ASC";
-        if ($status !== '') {
-            $sql .= " AND {$this->status} = ?";
-            $params[] = $status;
+            $params[] = "%$keyword%";
+            $params[] = "%$keyword%";
         }
 
-        $result = $this->pdo_query_one($sql, $params);
+        $result = $this->pdo_query_one($sql, params: $params);
         return $result['total'];
     }
 
+    public function findbyId($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE BookingID = ?";
+        $params = [$id];
+        return $this->pdo_query_one($sql, $params);
+    }
 
     public function store_id($data)
     {
@@ -169,5 +164,33 @@ class BookingModel extends Model
         WHERE b.BookingCode = ?";
 
         return $this->pdo_query_all($sql, [$bookingCode]);
+    }
+
+    public function createBooking($data)
+    {
+        $f = "";
+        $v = "";
+        foreach ($data as $key => $value) {
+            $f .= $key . ",";
+            $v .= "'" . $value . "',";
+        }
+        $f = trim($f, ",");
+        $v = trim($v, ",");
+        $sql = "INSERT INTO {$this->table}($f) VALUES ($v);";
+        return $this->pdo_execute_id($sql);
+    }
+
+    public function updateBooking($id, $data)
+    {
+        $set = "";
+        $params = [];
+        foreach ($data as $key => $value) {
+            $set .= $key . " = ?, ";
+            $params[] = $value;
+        }
+        $set = trim($set, ", ");
+        $sql = "UPDATE {$this->table} SET $set WHERE BookingID = ?";
+        $params[] = $id;
+        return $this->pdo_execute($sql, $params);
     }
 }

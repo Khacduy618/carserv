@@ -63,7 +63,7 @@ class ServiceCategoryModel extends Model
     public function softDeleteServiceCategory($id)
     {
         $date = date('Y-m-d H:i:s');
-        $sql = "UPDATE {$this->table} SET DeleteAt = '.$date.' WHERE {$this->contents} = ? ";
+        $sql = "UPDATE {$this->table} SET DeletedAt = '.$date.' WHERE {$this->contents} = ? ";
         return $this->pdo_execute($sql, $id);
     }
 

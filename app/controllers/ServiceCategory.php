@@ -40,6 +40,12 @@ class ServiceCategory extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST;
             $this->servicecategory_model->store($data);
+            $_SESSION['flash_message'] = [
+                'title' => 'Thêm mới!',
+                'img' => _WEB_ROOT . '/public/assets/img/ok-48.png',
+                'type' => 'success',
+                'message' => 'Thêm mới danh mục dịch vụ thành công!'
+            ];
             header('Location: ' . _WEB_ROOT . '/servicecategory');
             exit();
         }
@@ -55,13 +61,25 @@ class ServiceCategory extends Controller
         $servicecategory = $this->servicecategory_model->findbyId($id);
 
         if (!$servicecategory) {
-            echo "Service category not found";
+            $_SESSION['flash_message'] = [
+                'title' => 'Cảnh báo!',
+                'img' => _WEB_ROOT . '/public/assets/img/medium_priority-48.png',
+                'type' => 'error',
+                'message' => 'Danh mục không tồn tại!'
+            ];
+            header('Location: ' . _WEB_ROOT . '/servicecategory');
             exit;
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = $_POST;
-            $this->servicecategory_model->update($id, $data);
+            $this->servicecategory_model->update($data, $id);
+            $_SESSION['flash_message'] = [
+                'title' => 'Cập nhật!',
+                'img' => _WEB_ROOT . '/public/assets/img/ok-48.png',
+                'type' => 'success',
+                'message' => 'Cập nhật danh mục dịch vụ thành công!'
+            ];
             header('Location: ' . _WEB_ROOT . '/servicecategory');
             exit();
         }
@@ -76,6 +94,12 @@ class ServiceCategory extends Controller
     public function delete($id)
     {
         $this->servicecategory_model->softDeleteServiceCategory($id);
+        $_SESSION['flash_message'] = [
+            'title' => 'Thêm vào thùng rác!',
+            'img' => _WEB_ROOT . '/public/assets/img/ok-48.png',
+            'type' => 'success',
+            'message' => 'Thêm danh mục dịch vụ vào thùng rác thành công!'
+        ];
         header('Location: ' . _WEB_ROOT . '/servicecategory');
         exit();
     }

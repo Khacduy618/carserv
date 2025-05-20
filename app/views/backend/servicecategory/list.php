@@ -11,7 +11,7 @@
                     value="<?php echo htmlspecialchars($search); ?>">
             </form>
 
-            <a href="<?php echo _WEB_ROOT; ?>/servicecategory/add" class="btn btn-primary ms-auto">Add New</a>
+            <a href="<?php echo _WEB_ROOT; ?>/servicecategory-add" class="btn btn-primary ms-auto">Add New</a>
 
         </div>
 
@@ -48,9 +48,9 @@
                             <td><?php echo htmlspecialchars($servicecategory['CategoryName']); ?></td>
                             <td><?php echo htmlspecialchars($servicecategory['Description']); ?></td>
                             <td>
-                                <a href="<?php echo _WEB_ROOT; ?>/servicecategory/edit/<?php echo htmlspecialchars($servicecategory['CategoryID']); ?>"
+                                <a href="<?php echo _WEB_ROOT; ?>/servicecategory-edit/<?php echo htmlspecialchars($servicecategory['CategoryID']); ?>"
                                     class="btn btn-sm btn-primary">Edit</a>
-                                <a href="<?php echo _WEB_ROOT; ?>/servicecategory/delete/<?php echo htmlspecialchars($servicecategory['CategoryID']); ?>"
+                                <a href="<?php echo _WEB_ROOT; ?>/servicecategory-delete/<?php echo htmlspecialchars($servicecategory['CategoryID']); ?>"
                                     class="btn btn-sm btn-danger">Delete</a>
                             </td>
                         </tr>

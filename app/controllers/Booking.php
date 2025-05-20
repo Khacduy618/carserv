@@ -294,8 +294,28 @@ class Booking extends Controller
         $this->booking_model->updateBookingStatus($bookingCode, $data);
 
         // Redirect to search results page
-        header('Location: ' . _WEB_ROOT . '/search-booking?customerName=' . urlencode($_SESSION['customerName']) . '&license_plate=' . urlencode($_SESSION["license_plate"]));
+        // header('Location: ' . _WEB_ROOT . '/search-booking?customerName=' . urlencode($_SESSION['customerName']) . '&license_plate=' . urlencode($_SESSION["license_plate"]));
         exit();
+    }
+
+    public function edit($bookingCode)
+    {
+        //Get booking details from the model
+        $booking = $this->booking_model->getBookingDetails($bookingCode);
+
+        if ($booking) {
+            // Get all booking statuses
+            $bookingStatuses = $this->booking_model->getAllBookingStatuses();
+
+            //Load the edit view and pass the booking data to it
+            $this->data['sub_content']['booking'] = $booking;
+            $this->data['sub_content']['bookingStatuses'] = $bookingStatuses;
+            $this->data['content'] = 'frontend/booking/edit'; // Assuming the view file is in frontend/booking/edit.php
+            $this->render('layouts/client_layout', $this->data);
+        } else {
+            // Handle the case where the booking is not found
+            echo "Booking not found.";
+        }
     }
 
     public function detail($bookingCode)
@@ -318,6 +338,116 @@ class Booking extends Controller
             // Handle the case where the booking is not found
             echo "Booking not found.";
         }
+    }
+
+    public function list()
+    {
+        $search = isset($_GET['search']) ? $_GET['search'] : null;
+        $sort = isset($_GET['sort']) ? $_GET['sort'] : 'CarID';
+        $order = isset($_GET['order']) ? $_GET['order'] : 'ASC';
+        $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+        $item_per_page = 10;
+
+        $bookings = $this->booking_model->getBookings($search, $sort, $order, $page, $item_per_page);
+        $total_bookings = $this->booking_model->getTotalBookings($search);
+        $total_pages = ceil($total_bookings / $item_per_page);
+
+        $this->data['sub_content']['bookings'] = $bookings;
+        $this->data['sub_content']['search'] = $search;
+        $this->data['sub_content']['sort'] = $sort;
+        $this->data['sub_content']['order'] = $order;
+        $this->data['sub_content']['page'] = $page;
+        $this->data['sub_content']['total_pages'] = $total_pages;
+        $this->data['content'] = 'backend/booking/list';
+        $this->render('layouts/admin_layout', $this->data);
+    }
+
+    public function update($bookingCode)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Get the data from the form
+            $customerName = $_POST['CustomerName'];
+            $customerPhoneNumber = $_POST['CustomerPhoneNumber'];
+            $customerEmail = $_POST['CustomerEmail'];
+            $bookingDate = $_POST['BookingDate'];
+            $notes = $_POST['Notes'];
+            $statusID = $_POST['StatusID'];
+
+            // Validate the data
+            $errors = [];
+
+            if (empty($customerName)) {
+                $errors['customerName'] = 'Vui lòng nhập tên của bạn.';
+            }
+
+            if (empty($customerPhoneNumber)) {
+                $errors['customerPhoneNumber'] = 'Vui lòng nhập số điện thoại của bạn.';
+            } elseif (!preg_match('/^[0-9]{10}$/', $customerPhoneNumber)) {
+                $errors['customerPhoneNumber'] = 'Số điện thoại không hợp lệ.';
+            }
+
+            if (empty($customerEmail)) {
+                $errors['customerEmail'] = 'Vui lòng nhập email của bạn.';
+            } elseif (!filter_var($customerEmail, FILTER_VALIDATE_EMAIL)) {
+                $errors['customerEmail'] = 'Email không hợp lệ.';
+            }
+
+            if (empty($bookingDate)) {
+                $errors['bookingDate'] = 'Vui lòng chọn ngày.';
+            }
+
+            if (empty($statusID)) {
+                $errors['statusID'] = 'Vui lòng chọn trạng thái.';
+            }
+
+            if (!empty($errors)) {
+                // Set an error message and redirect back to the edit form
+                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => implode('<br>', $errors)];
+                header('Location: ' . _WEB_ROOT . '/booking/edit/' . $bookingCode);
+                exit();
+            }
+
+            // Prepare the data for the database
+            $data = [
+                'CustomerName' => $customerName,
+                'CustomerPhoneNumber' => $customerPhoneNumber,
+                'CustomerEmail' => $customerEmail,
+                'BookingDate' => $bookingDate,
+                'Notes' => $notes,
+                'StatusID' => $statusID,
+            ];
+
+            // Update the booking in the database
+            $success = $this->booking_model->updateBooking($bookingCode, $data);
+
+            if ($success) {
+                // Set a success message and redirect to the booking details page
+                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'success', 'message' => 'Cập nhật lịch hẹn thành công!'];
+                header('Location: ' . _WEB_ROOT . '/booking/detail/' . $bookingCode);
+                exit();
+            } else {
+                // Set an error message and redirect back to the edit form
+                $_SESSION['flash_message'] = ['title' => 'Thông báo', 'type' => 'error', 'message' => 'Cập nhật lịch hẹn thất bại!'];
+                header('Location: ' . _WEB_ROOT . '/booking/edit/' . $bookingCode);
+                exit();
+            }
+        } else {
+            // Redirect to the booking details page
+            header('Location: ' . _WEB_ROOT . '/booking/detail/' . $bookingCode);
+            exit();
+        }
+    }
+
+    public function add()
+    {
+        // Get all booking statuses
+        $bookingStatuses = $this->booking_model->getAllBookingStatuses();
+
+        // Pass the data to the view
+        $this->data['sub_content']['bookingStatuses'] = $bookingStatuses;
+
+        $this->data['content'] = 'backend/booking/add';
+        $this->render('layouts/admin_layout', $this->data);
     }
 
     // public function success()
